@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Saluran Liliyana</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{background:#000;color:#fff;height:100vh;overflow:hidden}
+.blue{color:#2AABEE}
+.btn-blue{background:#2AABEE;color:#fff;border:none;padding:12px 18px;border-radius:10px;font-weight:700;cursor:pointer;width:100%;font-size:15px}
+.btn-blue:hover{background:#229ED9}
+.btn-ghost{background:#1c1c1c;color:#2AABEE;border:1px solid #2AABEE;padding:12px;border-radius:10px;width:100%;cursor:pointer;font-weight:700;margin-top:10px}
+
+/* LOGIN SCREEN */
+#loginScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:24px;background:radial-gradient(circle at 50% 0%, #0a2a4a 0%, #000 60%)}
+.logo{width:90px;height:90px;background:#2AABEE;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:15px;box-shadow:0 0 40px #2AABEE88}
+#loginScreen h1{font-size:26px;margin-bottom:5px}
+#loginScreen p{color:#aaa;margin-bottom:25px;font-size:14px}
+.card{width:100%;max-width:380px;background:#111;border:1px solid #222;border-radius:16px;padding:20px}
+.card h3{margin-bottom:15px;color:#2AABEE}
+.input{width:100%;background:#1e1e1e;border:1px solid #333;color:#fff;padding:12px;border-radius:10px;margin-bottom:10px;outline:none}
+.input:focus{border-color:#2AABEE}
+.tabs{display:flex;background:#1e1e1e;border-radius:10px;padding:4px;margin-bottom:15px}
+.tabs button{flex:1;padding:10px;border:none;background:transparent;color:#aaa;border-radius:8px;font-weight:700;cursor:pointer}
+.tabs button.active{background:#2AABEE;color:#fff}
+
+/* APP LAYOUT */
+#app{display:none;height:100vh;flex-direction:column;max-width:900px;margin:0 auto;background:#0f0f0f;border-left:1px solid #222;border-right:1px solid #222}
+header{background:#17212b;padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #222;position:relative}
+header img{width:45px;height:45px;border-radius:50%;object-fit:cover}
+header.info{flex:1}
+header.info b{font-size:16px}
+header.info span{font-size:12px;color:#2AABEE;display:block}
+.icon-btn{background:none;border:none;color:#aaa;font-size:18px;cursor:pointer;padding:8px}
+.icon-btn:hover{color:#2AABEE}
+
+/* SIDEBAR CHANNEL LIST (Telegram Style) */
+#channelList{width:280px;background:#17212b;border-right:1px solid #222;overflow-y:auto;display:none}
+@media(min-width:900px){#mainWrap{display:flex;flex:1;overflow:hidden}#channelList{display:block}}
+.chat-item{display:flex;gap:10px;padding:12px;cursor:pointer;border-bottom:1px solid #1c1c1c}
+.chat-item:hover{background:#232e3a}
+.chat-item.active{background:#2AABEE;color:#fff}
+.chat-item img{width:50px;height:50px;border-radius:50%}
+.chat-item small{color:#aaa;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+
+/* MESSAGES */
+#messages{flex:1;overflow-y:auto;padding:20px;background:#0b0b0b;background-image:radial-gradient(#1a1a1a 1px, transparent 1px);background-size:20px 20px}
+.msg{background:#182533;border-radius:12px;padding:12px 14px;margin-bottom:14px;max-width:75%;position:relative;border:1px solid #222}
+.msg.admin{background:#2b5278}
+.msg.head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.msg.head img{width:28px;height:28px;border-radius:50%}
+.msg.head b{font-size:13px;color:#2AABEE}
+.msg.time{font-size:11px;color:#7f91a4;text-align:right}
+.msg img.post-img{width:100%;border-radius:10px;margin-top:8px}
+.msg.actions{display:flex;gap:10px;margin-top:8px;font-size:13px}
+.msg.actions span{cursor:pointer;color:#aaa}
+.msg.actions span:hover{color:#2AABEE}
+.pinned{background:#111;border-left:3px solid #2AABEE;padding:8px 12px;font-size:12px;color:#2AABEE;margin-bottom:10px;border-radius:8px}
+.comment-box{background:#0f0f0f;border-radius:8px;padding:8px;margin-top:8px;font-size:13px}
+.comment-box b{color:#2AABEE}
+
+/* INPUT BAR */
+#inputBar{display:flex;gap:10px;padding:12px;background:#17212b;border-top:1px solid #222;align-items:center}
+#inputBar input{flex:1;background:#0f0f0f;border:1px solid #333;color:#fff;padding:12px;border-radius:20px;outline:none}
+#sendBtn{background:#2AABEE;border:none;color:#fff;width:46px;height:46px;border-radius:50%;font-size:18px;cursor:pointer}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);align-items:center;justify-content:center;z-index:99;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:#17212b;width:100%;max-width:400px;border-radius:16px;padding:20px;border:1px solid #2AABEE}
+.modal-content h3{color:#2AABEE;margin-bottom:15px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="logo"><i class="fa-brands fa-telegram"></i></div>
+  <h1>Saluran <span class="blue">Liliyana</span></h1>
+  <p>Channel resmi Liliyana De Zenith</p>
+
+  <div class="card">
+    <div class="tabs">
+      <button id="tabVisitor" class="active" onclick="switchTab('visitor')">Pengunjung</button>
+      <button id="tabAdmin" onclick="switchTab('admin')">Liliyana De Zenith</button>
+    </div>
+
+    <!-- VISITOR -->
+    <div id="formVisitor">
+      <input class="input" id="visitorName" placeholder="Nama kamu (Pengunjung)">
+      <button class="btn-blue" onclick="loginVisitor()">Masuk sebagai Pengunjung</button>
+      <p style="text-align:center;color:#666;font-size:12px;margin-top:10px">Pengunjung hanya bisa lihat saluran Liliyana</p>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="formAdmin" style="display:none">
+      <input class="input" id="adminUser" placeholder="Username">
+      <input class="input" id="adminEmail" type="email" placeholder="Gmail">
+      <input class="input" id="adminPass" type="password" placeholder="Password">
+      <input class="input" id="adminCode" placeholder="Kode Akses Admin">
+      <button class="btn-blue" onclick="loginAdmin()">Masuk sebagai Liliyana De Zenith</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <img id="chAvatar" src="https://i.pravatar.cc/100?img=47">
+    <div class="info">
+      <b id="chName">Saluran Liliyana</b>
+      <span id="chMembers">12.542 subscriber • Official Channel</span>
+    </div>
+    <button class="icon-btn" onclick="openSearch()"><i class="fa fa-search"></i></button>
+    <button class="icon-btn" onclick="openProfile()"><i class="fa fa-user"></i></button>
+    <button class="icon-btn" onclick="logout()"><i class="fa fa-sign-out-alt"></i></button>
+  </header>
+
+  <div id="mainWrap" style="display:flex;flex:1;overflow:hidden">
+    <!-- Channel List Telegram -->
+    <div id="channelList">
+      <div style="padding:15px;color:#2AABEE;font-weight:700">Saluran</div>
+      <div class="chat-item active" onclick="filterChannel('liliyana')">
+        <img src="https://i.pravatar.cc/100?img=47">
+        <div><b>Saluran Liliyana</b><small id="previewLast">Selamat datang di saluran resmi...</small><small class="blue" id="previewCount">128 pesan</small></div>
+      </div>
+      <div class="chat-item" style="opacity:0.5">
+        <img src="https://i.pravatar.cc/100?img=12">
+        <div><b>Lock - Private</b><small>Hanya untuk Liliyana</small></div>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <div id="pinnedBar"></div>
+      <div id="messages"></div>
+      <div id="inputBar">
+        <label for="imgUpload" style="color:#2AABEE;font-size:20px;cursor:pointer"><i class="fa fa-image"></i></label>
+        <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="handleImg(this)">
+        <input id="msgInput" placeholder="Tulis pesan di saluran...">
+        <button id="sendBtn" onclick="sendMessage()"><i class="fa fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROFILE -->
+<div class="modal" id="profileModal">
+  <div class="modal-content">
+    <h3>Edit Profil Saya</h3>
+    <input class="input" id="editName" placeholder="Nama">
+    <input class="input" id="editBio" placeholder="Bio">
+    <input class="input" id="editAvatar" placeholder="Link Foto Profil (URL)">
+    <button class="btn-blue" onclick="saveProfile()">Simpan Profil</button>
+    <button class="btn-ghost" onclick="closeModal('profileModal')">Tutup</button>
+  </div>
+</div>
+
+<!-- MODAL EDIT CHANNEL -->
+<div class="modal" id="channelModal">
+  <div class="modal-content">
+    <h3>Edit Saluran Liliyana</h3>
+    <input class="input" id="editChName" placeholder="Nama Saluran">
+    <input class="input" id="editChDesc" placeholder="Deskripsi Saluran">
+    <input class="input" id="editChAvatar" placeholder="Link Foto Saluran">
+    <button class="btn-blue" onclick="saveChannel()">Simpan Saluran</button>
+    <button class="btn-ghost" onclick="closeModal('channelModal')">Tutup</button>
+  </div>
+</div>
+
+<script>
+const ADMIN_CODE = "RYUKA5522";
+let currentUser = JSON.parse(localStorage.getItem('liliyana_user') || 'null');
+let posts = JSON.parse(localStorage.getItem('liliyana_posts') || 'null') || [
+  {id:1, author:"Liliyana De Zenith", avatar:"https://i.pravatar.cc/100?img=47", text:"Selamat datang di Saluran Liliyana! Ini channel resmi. Jangan lupa follow ya!", img:null, time:Date.now()-86400000, likes:[], comments:[{user:"Pengunjung", text:"Mantap kak!"}], pinned:true},
+  {id:2, author:"Liliyana De Zenith", avatar:"https://i.pravatar.cc/100?img=47", text:"Info terbaru: Jadwal live minggu ini!", img:null, time:Date.now()-3600000, likes:["Andi"], comments:[], pinned:false}
+];
+let channel = JSON.parse(localStorage.getItem('liliyana_channel') || 'null') || {name:"Saluran Liliyana", desc:"Official Channel", avatar:"https://i.pravatar.cc/100?img=47"};
+
+function switchTab(t){
+  document.getElementById('tabVisitor').classList.toggle('active', t==='visitor');
+  document.getElementById('tabAdmin').classList.toggle('active', t==='admin');
+  document.getElementById('formVisitor').style.display = t==='visitor'?'block':'none';
+  document.getElementById('formAdmin').style.display = t==='admin'?'block':'none';
+}
+function loginVisitor(){
+  let name = document.getElementById('visitorName').value.trim();
+  if(!name) return alert('Isi nama kamu dulu');
+  currentUser = {username:name, role:'visitor', avatar:'https://i.pravatar.cc/100?img=8', bio:'Pengunjung'};
+  localStorage.setItem('liliyana_user', JSON.stringify(currentUser));
+  enterApp();
+}
+function loginAdmin(){
+  let u = document.getElementById('adminUser').value.trim();
+  let e = document.getElementById('adminEmail').value.trim();
+  let p = document.getElementById('adminPass').value.trim();
+  let c = document.getElementById('adminCode').value.trim();
+  if(!u||!e||!p) return alert('Isi semua data!');
+  if(c!==ADMIN_CODE) return alert('Kode salah! Harus RYUKA5522');
+  currentUser = {username:u, email:e, role:'admin', avatar:'https://i.pravatar.cc/100?img=47', bio:'Liliyana De Zenith - Admin'};
+  localStorage.setItem('liliyana_user', JSON.stringify(currentUser));
+  enterApp();
+}
+function enterApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  if(currentUser.role!=='admin'){
+    document.getElementById('inputBar').style.display='none';
+  } else {
+    // admin bisa edit channel
+    let btn = document.createElement('button');
+    btn.className='icon-btn'; btn.innerHTML='<i class="fa fa-edit"></i>';
+    btn.title='Edit Saluran';
+    btn.onclick=()=>{document.getElementById('editChName').value=channel.name;document.getElementById('editChAvatar').value=channel.avatar;document.getElementById('channelModal').classList.add('active')};
+    document.querySelector('header').appendChild(btn);
+  }
+  renderChannel();
+  renderMessages();
+}
+function renderChannel(){
+  document.getElementById('chName').innerText = channel.name;
+  document.getElementById('chAvatar').src = channel.avatar;
+}
+function renderMessages(filter=''){
+  let box = document.getElementById('messages');
+  box.innerHTML='';
+  let pinned = posts.find(p=>p.pinned);
+  document.getElementById('pinnedBar').innerHTML = pinned? `<div class="pinned">📌 Pinned: ${pinned.text.slice(0,60)}</div>` : '';
+
+  posts.slice().reverse().forEach(p=>{
+    if(filter &&!p.text.toLowerCase().includes(filter.toLowerCase())) return;
+    let isAdmin = currentUser && currentUser.role==='admin';
+    let div=document.createElement('div');
+    div.className='msg';
+    if(p.author.includes('Liliyana')) div.classList.add('admin');
+    div.innerHTML=`
+      <div class="head"><img src="${p.avatar}"><b>${p.author}</b></div>
+      <div>${p.text}</div>
+      ${p.img?`<img class="post-img" src="${p.img}">`:''}
+      <div class="time">${new Date(p.time).toLocaleString('id-ID')}</div>
+      <div class="actions">
+        <span onclick="likePost(${p.id})">❤️ ${p.likes.length}</span>
+        <span onclick="commentPost(${p.id})">💬 ${p.comments.length}</span>
+        ${isAdmin?`<span onclick="deletePost(${p.id})">🗑️</span><span onclick="pinPost(${p.id})">📌</span>`:''}
+      </div>
+      ${p.comments.map(c=>`<div class="comment-box"><b>${c.user}:</b> ${c.text}</div>`).join('')}
+    `;
+    box.appendChild(div);
+  });
+}
+function sendMessage(){
+  if(currentUser.role!=='admin') return alert('Hanya Liliyana yang bisa posting!');
+  let inp=document.getElementById('msgInput');
+  let text=inp.value.trim();
+  if(!text &&!tempImg) return;
+  posts.push({id:Date.now(), author:currentUser.username, avatar:currentUser.avatar, text:text, img:tempImg, time:Date.now(), likes:[], comments:[], pinned:false});
+  tempImg=null;
+  inp.value='';
+  localStorage.setItem('liliyana_posts', JSON.stringify(posts));
+  renderMessages();
+}
+let tempImg=null;
+function handleImg(input){
+  let file=input.files[0];
+  let reader=new FileReader();
+  reader.onload=e=>{tempImg=e.target.result; alert('Gambar siap dikirim! Klik tombol kirim')};
+  reader.readAsDataURL(file);
+}
+function likePost(id){
+  let p=posts.find(x=>x.id===id);
+  if(!p.likes.includes(currentUser.username)) p.likes.push(currentUser.username);
+  localStorage.setItem('liliyana_posts', JSON.stringify(posts));
+  renderMessages();
+}
+function commentPost(id){
+  let txt=prompt('Tulis komentar:');
+  if(!txt) return;
+  let p=posts.find(x=>x.id===id);
+  p.comments.push({user:currentUser.username, text:txt});
+  localStorage.setItem('liliyana_posts', JSON.stringify(posts));
+  renderMessages();
+}
+function deletePost(id){
+  if(!confirm('Hapus pesan ini?')) return;
+  posts=posts.filter(p=>p.id!==id);
+  localStorage.setItem('liliyana_posts', JSON.stringify(posts));
+  renderMessages();
+}
+function pinPost(id){
+  posts.forEach(p=>p.pinned=false);
+  let p=posts.find(x=>x.id===id);
+  p.pinned=true;
+  localStorage.setItem('liliyana_posts', JSON.stringify(posts));
+  renderMessages();
+}
+function openProfile(){
+  document.getElementById('editName').value=currentUser.username;
+  document.getElementById('editBio').value=currentUser.bio||'';
+  document.getElementById('editAvatar').value=currentUser.avatar;
+  document.getElementById('profileModal').classList.add('active');
+}
+function saveProfile(){
+  currentUser.username=document.getElementById('editName').value;
+  currentUser.bio=document.getElementById('editBio').value;
+  currentUser.avatar=document.getElementById('editAvatar').value;
+  localStorage.setItem('liliyana_user', JSON.stringify(currentUser));
+  closeModal('profileModal');
+  alert('Profil berhasil diganti!');
+}
+function saveChannel(){
+  channel.name=document.getElementById('editChName').value;
+  channel.desc=document.getElementById('editChDesc').value;
+  channel.avatar=document.getElementById('editChAvatar').value;
+  localStorage.setItem('liliyana_channel', JSON.stringify(channel));
+  renderChannel();
+  closeModal('channelModal');
+}
+function openSearch(){
+  let q=prompt('Cari pesan di saluran:');
+  if(q) renderMessages(q);
+}
+function closeModal(id){document.getElementById(id).classList.remove('active')}
+function logout(){localStorage.removeItem('liliyana_user');location.reload()}
+
+// auto login if already
+if(currentUser) enterApp();
+</script>
+</body>
+</html>
